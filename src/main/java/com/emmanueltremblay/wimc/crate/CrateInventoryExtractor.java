@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.Optional;
 
 public final class CrateInventoryExtractor {
+    private static final int MAX_CAPABILITY_SLOTS_TO_SCAN = 256;
+
     private CrateInventoryExtractor() {
     }
 
@@ -35,19 +37,20 @@ public final class CrateInventoryExtractor {
         int expectedSlots = CratePreviewDetector.expectedSlotCount(stack);
 
         Optional<CratePreviewContents> dataComponentPreview = fromContainerComponent(stack, expectedSlots, maxRows, columns, showEmptySlots);
-        if (dataComponentPreview.isPresent()) {
+        if (dataComponentPreview.isPresent() && dataComponentPreview.get().status() == CratePreviewStatus.READY) {
             return dataComponentPreview;
         }
 
         if (stack.get(DataComponents.CONTAINER_LOOT) != null) {
-            return Optional.of(CratePreviewContents.create(
-                    List.of(),
-                    0,
-                    maxRows,
-                    columns,
-                    false,
-                    CratePreviewStatus.LOOT_UNRESOLVED
-            ));
+            return Optional.of(unresolvedLoot(maxRows, columns));
+        }
+
+        if (hasBlockEntityLootTable(stack)) {
+            return Optional.of(unresolvedLoot(maxRows, columns));
+        }
+
+        if (dataComponentPreview.isPresent()) {
+            return dataComponentPreview;
         }
 
         Optional<CratePreviewContents> blockEntityPreview = fromBlockEntityData(stack, registries, expectedSlots, maxRows, columns, showEmptySlots);
@@ -72,6 +75,17 @@ public final class CrateInventoryExtractor {
         }
 
         return Optional.empty();
+    }
+
+    private static CratePreviewContents unresolvedLoot(int maxRows, int columns) {
+        return CratePreviewContents.create(
+                List.of(),
+                0,
+                maxRows,
+                columns,
+                false,
+                CratePreviewStatus.LOOT_UNRESOLVED
+        );
     }
 
     private static Optional<CratePreviewContents> fromContainerComponent(
@@ -131,6 +145,15 @@ public final class CrateInventoryExtractor {
         }
     }
 
+    private static boolean hasBlockEntityLootTable(ItemStack stack) {
+        CustomData blockEntityData = stack.get(DataComponents.BLOCK_ENTITY_DATA);
+        return blockEntityData != null
+                && !blockEntityData.contains("Items")
+                && (blockEntityData.contains("LootTable")
+                || blockEntityData.contains("loot_table")
+                || blockEntityData.contains("lootTable"));
+    }
+
     private static Optional<CratePreviewContents> fromItemCapability(
             ItemStack stack,
             int maxRows,
@@ -139,17 +162,23 @@ public final class CrateInventoryExtractor {
     ) {
         try {
             IItemHandler handler = stack.getCapability(Capabilities.ItemHandler.ITEM, null);
-            if (handler == null || handler.getSlots() <= 0) {
+            if (handler == null) {
                 return Optional.empty();
             }
 
-            List<ItemStack> slots = new ArrayList<>(handler.getSlots());
-            for (int slot = 0; slot < handler.getSlots(); slot++) {
+            int handlerSlots = handler.getSlots();
+            if (handlerSlots <= 0) {
+                return Optional.empty();
+            }
+
+            int slotsToScan = Math.min(handlerSlots, MAX_CAPABILITY_SLOTS_TO_SCAN);
+            List<ItemStack> slots = new ArrayList<>(slotsToScan);
+            for (int slot = 0; slot < slotsToScan; slot++) {
                 slots.add(handler.getStackInSlot(slot).copy());
             }
 
             CratePreviewStatus status = hasAnyItem(slots) ? CratePreviewStatus.READY : CratePreviewStatus.EMPTY;
-            return Optional.of(CratePreviewContents.create(slots, handler.getSlots(), maxRows, columns, showEmptySlots, status));
+            return Optional.of(CratePreviewContents.create(slots, handlerSlots, maxRows, columns, showEmptySlots, status));
         } catch (RuntimeException exception) {
             return Optional.empty();
         }

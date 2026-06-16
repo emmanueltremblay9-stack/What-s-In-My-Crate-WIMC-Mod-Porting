@@ -61,9 +61,17 @@ public final class ClientCratePreviewTooltipComponent implements ClientTooltipCo
             }
 
             if (!stack.isEmpty()) {
-                graphics.renderItem(stack, slotX + ITEM_OFFSET, slotY + ITEM_OFFSET);
-                graphics.renderItemDecorations(font, stack, slotX + ITEM_OFFSET, slotY + ITEM_OFFSET);
+                renderStackSafely(font, graphics, stack, slotX + ITEM_OFFSET, slotY + ITEM_OFFSET);
             }
+        }
+    }
+
+    private static void renderStackSafely(Font font, GuiGraphics graphics, ItemStack stack, int x, int y) {
+        try {
+            graphics.renderItem(stack, x, y);
+            graphics.renderItemDecorations(font, stack, x, y);
+        } catch (RuntimeException exception) {
+            // Malformed component data or a broken item renderer should not crash the whole tooltip.
         }
     }
 
