@@ -10,6 +10,14 @@ Target: Minecraft 1.21.1, NeoForge 21.1.x, Java 21.
 - `./gradlew.bat build --no-daemon` completed successfully on Java 21.
 - Dedicated server smoke launch reached `Done (...)! For help, type "help"` with the mod list limited to `wimc`, `minecraft`, and `neoforge`.
 
+## Bugfix Pass - June 16, 2026
+
+- Fixed `requireShiftForPreview=true` so the Shift hint is added only when the hovered stack can actually produce a crate preview.
+- Fixed `showEmptySlots=false` so trimmed empty tail slots are not reported as hidden/truncated slots.
+- Added resource pack `supported_formats` metadata and repository line-ending normalization.
+- Re-ran `./gradlew.bat build --no-daemon`; build completed successfully.
+- Re-ran a dedicated server smoke launch; server reached `Done (...)! For help, type "help"`.
+
 ## In-Game Manual Scenarios To Run With Immersive Engineering Installed
 
 - Empty crate: hover an IE crate with no `minecraft:container` contents. With `showEmptySlots=true`, expect a 9-wide empty grid. With it disabled, expect no grid.

@@ -28,8 +28,10 @@ public record CratePreviewContents(
     ) {
         int safeColumns = clamp(columns, 1, PREFERRED_COLUMNS);
         int safeRows = clamp(maxRows, 1, 12);
+        int slotCapacity = safeColumns * safeRows;
         int totalSlots = Math.max(0, Math.max(expectedSlots, sourceSlots.size()));
-        int visibleSlots = Math.min(totalSlots, safeColumns * safeRows);
+        int clampedSlots = Math.min(totalSlots, slotCapacity);
+        int visibleSlots = clampedSlots;
 
         if (!showEmptySlots && status == CratePreviewStatus.EMPTY) {
             visibleSlots = 0;
@@ -44,7 +46,7 @@ public record CratePreviewContents(
             visible.add(stack.copy());
         }
 
-        int hiddenSlots = Math.max(0, totalSlots - visibleSlots);
+        int hiddenSlots = hiddenSlots(sourceSlots, totalSlots, clampedSlots, showEmptySlots, status);
         return new CratePreviewContents(List.copyOf(visible), safeColumns, rows, totalSlots, hiddenSlots, showEmptySlots, status);
     }
 
@@ -70,6 +72,31 @@ public record CratePreviewContents(
             }
         }
         return last;
+    }
+
+    private static int hiddenSlots(
+            List<ItemStack> sourceSlots,
+            int totalSlots,
+            int clampedSlots,
+            boolean showEmptySlots,
+            CratePreviewStatus status
+    ) {
+        if (totalSlots <= clampedSlots || (!showEmptySlots && status == CratePreviewStatus.EMPTY)) {
+            return 0;
+        }
+        if (showEmptySlots || hasNonEmptySlotsAfter(sourceSlots, clampedSlots)) {
+            return totalSlots - clampedSlots;
+        }
+        return 0;
+    }
+
+    private static boolean hasNonEmptySlotsAfter(List<ItemStack> slots, int startSlot) {
+        for (int slot = Math.max(0, startSlot); slot < slots.size(); slot++) {
+            if (!slots.get(slot).isEmpty()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private static int clamp(int value, int min, int max) {

@@ -13,6 +13,7 @@ import net.neoforged.neoforge.client.event.RegisterClientTooltipComponentFactori
 import net.neoforged.neoforge.client.event.RenderTooltipEvent;
 
 import javax.annotation.Nullable;
+import java.util.Optional;
 
 public final class CratePreviewTooltipEvents {
     private static final int TOOLTIP_SCREEN_MARGIN = 16;
@@ -29,19 +30,23 @@ public final class CratePreviewTooltipEvents {
             return;
         }
 
-        if (WimcClientConfig.requireShiftForPreview() && !Screen.hasShiftDown()) {
-            event.getTooltipElements().add(Either.left(Component.translatable("wimc.tooltip.crate_preview.shift")));
-            return;
-        }
-
         int columns = columnsForScreen(event.getScreenWidth());
-        CrateInventoryExtractor.extract(
+        Optional<CratePreviewContents> preview = CrateInventoryExtractor.extract(
                 event.getItemStack(),
                 registryAccess(),
                 WimcClientConfig.maxPreviewRows(),
                 columns,
                 WimcClientConfig.showEmptySlots()
-        ).ifPresent(contents -> {
+        );
+
+        if (WimcClientConfig.requireShiftForPreview() && !Screen.hasShiftDown()) {
+            if (preview.isPresent()) {
+                event.getTooltipElements().add(Either.left(Component.translatable("wimc.tooltip.crate_preview.shift")));
+            }
+            return;
+        }
+
+        preview.ifPresent(contents -> {
             event.getTooltipElements().add(Either.right(new CratePreviewTooltipComponent(contents)));
             if (event.getMaxWidth() != -1) {
                 event.setMaxWidth(Math.max(event.getMaxWidth(), contents.columns() * CratePreviewContents.SLOT_SIZE));
