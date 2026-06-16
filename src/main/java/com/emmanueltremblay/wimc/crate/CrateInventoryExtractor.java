@@ -49,16 +49,24 @@ public final class CrateInventoryExtractor {
             return Optional.of(unresolvedLoot(maxRows, columns));
         }
 
-        if (dataComponentPreview.isPresent()) {
-            return dataComponentPreview;
-        }
-
         Optional<CratePreviewContents> blockEntityPreview = fromBlockEntityData(stack, registries, expectedSlots, maxRows, columns, showEmptySlots);
-        if (blockEntityPreview.isPresent()) {
+        if (blockEntityPreview.isPresent() && blockEntityPreview.get().status() == CratePreviewStatus.READY) {
             return blockEntityPreview;
         }
 
         Optional<CratePreviewContents> capabilityPreview = fromItemCapability(stack, maxRows, columns, showEmptySlots);
+        if (capabilityPreview.isPresent() && capabilityPreview.get().status() == CratePreviewStatus.READY) {
+            return capabilityPreview;
+        }
+
+        if (dataComponentPreview.isPresent()) {
+            return dataComponentPreview;
+        }
+
+        if (blockEntityPreview.isPresent()) {
+            return blockEntityPreview;
+        }
+
         if (capabilityPreview.isPresent()) {
             return capabilityPreview;
         }
@@ -147,11 +155,26 @@ public final class CrateInventoryExtractor {
 
     private static boolean hasBlockEntityLootTable(ItemStack stack) {
         CustomData blockEntityData = stack.get(DataComponents.BLOCK_ENTITY_DATA);
-        return blockEntityData != null
-                && !blockEntityData.contains("Items")
-                && (blockEntityData.contains("LootTable")
-                || blockEntityData.contains("loot_table")
-                || blockEntityData.contains("lootTable"));
+        if (blockEntityData == null) {
+            return false;
+        }
+
+        try {
+            CompoundTag tag = blockEntityData.copyTag();
+            return hasLootTableKey(tag) && !hasItemEntries(tag);
+        } catch (RuntimeException exception) {
+            return false;
+        }
+    }
+
+    private static boolean hasLootTableKey(CompoundTag tag) {
+        return tag.contains("LootTable")
+                || tag.contains("loot_table")
+                || tag.contains("lootTable");
+    }
+
+    private static boolean hasItemEntries(CompoundTag tag) {
+        return tag.contains("Items", Tag.TAG_LIST) && !tag.getList("Items", Tag.TAG_COMPOUND).isEmpty();
     }
 
     private static Optional<CratePreviewContents> fromItemCapability(

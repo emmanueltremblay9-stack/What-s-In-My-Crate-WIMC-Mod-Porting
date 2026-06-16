@@ -32,6 +32,13 @@ Target: Minecraft 1.21.1, NeoForge 21.1.x, Java 21.
 - Wrapped per-stack preview rendering so a broken item icon/decorator skips that slot instead of crashing the tooltip.
 - Re-ran `./gradlew.bat build --no-daemon`; build completed successfully with the QA task.
 
+## Bugfix Pass 4 - June 16, 2026
+
+- Fixed block-entity loot-table detection when a supported crate has a loot key plus an empty or malformed `Items` tag.
+- Fixed false-empty precedence so a non-empty block-entity or item-capability inventory can override an empty container data component.
+- Re-ran `./gradlew.bat build --no-daemon`; build completed successfully with the QA task.
+- Re-ran a dedicated server smoke launch; server reached `Done (...)! For help, type "help"`.
+
 ## In-Game Manual Scenarios To Run With Immersive Engineering Installed
 
 - Empty crate: hover an IE crate with no `minecraft:container` contents. With `showEmptySlots=true`, expect a 9-wide empty grid. With it disabled, expect no grid.
