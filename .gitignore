@@ -1,0 +1,15 @@
+.gradle/
+build/
+run/
+run-*/
+out/
+*.class
+*.log
+*.jar
+!gradle/wrapper/gradle-wrapper.jar
+*.war
+*.ear
+*.iml
+.idea/
+.vscode/
+src/generated/resources/.cache/
