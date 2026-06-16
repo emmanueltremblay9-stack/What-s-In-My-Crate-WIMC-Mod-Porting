@@ -25,6 +25,14 @@ sourceSets.main.resources {
     exclude("src/generated/**/.cache")
 }
 
+sourceSets {
+    qa {
+        java.srcDir('src/qa/java')
+        compileClasspath += sourceSets.main.output + sourceSets.main.compileClasspath
+        runtimeClasspath += output + compileClasspath
+    }
+}
+
 neoForge {
     version = neo_version
 
@@ -113,6 +121,17 @@ publishing {
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
+}
+
+tasks.register('qaPreviewModel', JavaExec) {
+    group = 'verification'
+    description = 'Runs lightweight regression checks for crate preview model behavior.'
+    classpath = sourceSets.qa.runtimeClasspath
+    mainClass = 'com.emmanueltremblay.wimc.crate.CratePreviewContentsQa'
+}
+
+tasks.named('check').configure {
+    dependsOn tasks.named('qaPreviewModel')
 }
 
 idea {

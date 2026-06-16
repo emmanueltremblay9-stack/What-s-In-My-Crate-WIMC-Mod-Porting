@@ -89,10 +89,8 @@ public final class CrateInventoryExtractor {
         try {
             int componentSlots = contents.getSlots();
             int totalSlots = Math.max(expectedSlots, componentSlots);
-            List<ItemStack> slots = new ArrayList<>(totalSlots);
-            for (int slot = 0; slot < totalSlots; slot++) {
-                slots.add(slot < componentSlots ? contents.getStackInSlot(slot) : ItemStack.EMPTY);
-            }
+            NonNullList<ItemStack> slots = NonNullList.withSize(totalSlots, ItemStack.EMPTY);
+            contents.copyInto(slots);
 
             CratePreviewStatus status = hasAnyItem(slots) ? CratePreviewStatus.READY : CratePreviewStatus.EMPTY;
             return Optional.of(CratePreviewContents.create(slots, totalSlots, maxRows, columns, showEmptySlots, status));

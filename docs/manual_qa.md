@@ -18,6 +18,12 @@ Target: Minecraft 1.21.1, NeoForge 21.1.x, Java 21.
 - Re-ran `./gradlew.bat build --no-daemon`; build completed successfully.
 - Re-ran a dedicated server smoke launch; server reached `Done (...)! For help, type "help"`.
 
+## Bugfix Pass 2 - June 16, 2026
+
+- Switched `DataComponents.CONTAINER` extraction to `ItemContainerContents.copyInto(...)`, matching the vanilla/NeoForge component materialization path.
+- Added a lightweight `qaPreviewModel` verification task wired into `check` to prevent false hidden-slot reports for trimmed empty previews.
+- Re-ran `./gradlew.bat build --no-daemon`; build completed successfully with the QA task.
+
 ## In-Game Manual Scenarios To Run With Immersive Engineering Installed
 
 - Empty crate: hover an IE crate with no `minecraft:container` contents. With `showEmptySlots=true`, expect a 9-wide empty grid. With it disabled, expect no grid.
