@@ -1,0 +1,9 @@
+{
+  "settings_icon": {
+    "type": "item_display",
+    "items": [
+      "immersiveengineering:manual",
+      "immersiveengineering:crate"
+    ]
+  }
+}

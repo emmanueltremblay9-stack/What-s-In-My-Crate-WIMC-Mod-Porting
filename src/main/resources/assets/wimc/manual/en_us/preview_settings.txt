@@ -1,0 +1,10 @@
+Preview Settings
+Make the inspector fit your workshop
+<&settings_icon>The preview is controlled by the WIMC client config.
+By default it is enabled, does not require Shift, shows empty slots, and renders up to six rows.<br>
+The Immersive Engineering crate detector and this mod's opt-in crate detector can be toggled separately.<np>
+Use `requireShiftForPreview` if large tooltips get in your way.
+Use `maxPreviewRows` to cap tall previews, and `showEmptySlots` to choose between a full crate-shaped grid or only occupied slots.<br>
+When the inventory is larger than the visible area, the tooltip reports how many slots are hidden.<np>
+Loot-table-only crates are shown as unresolved because the client cannot safely know their future contents.
+Malformed item data is ignored defensively so a bad stack should not break the manual, the tooltip, or dedicated server startup.

@@ -1,0 +1,9 @@
+{
+  "crate_icons": {
+    "type": "item_display",
+    "items": [
+      "immersiveengineering:crate",
+      "immersiveengineering:reinforced_crate"
+    ]
+  }
+}

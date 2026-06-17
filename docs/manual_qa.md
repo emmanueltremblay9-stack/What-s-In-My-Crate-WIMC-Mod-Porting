@@ -39,7 +39,20 @@ Target: Minecraft 1.21.1, NeoForge 21.1.x, Java 21.
 - Re-ran `./gradlew.bat build --no-daemon`; build completed successfully with the QA task.
 - Re-ran a dedicated server smoke launch; server reached `Done (...)! For help, type "help"`.
 
-## In-Game Manual Scenarios To Run With Immersive Engineering Installed
+## Engineer's Manual Layout Pass - June 17, 2026
+
+- Added a small Immersive Engineering manual autoload hook under `assets/immersiveengineering/manual/autoload.json`.
+- Added a nested `Factory Inventory Inspector` section under IE's existing Storage & Transport category.
+- Added three short entries: overview, supported crates, and preview settings.
+- Added anchored crate icons through `item_display` special elements.
+- Added explicit IE recipe references for `immersiveengineering:crafting/crate` and `immersiveengineering:crafting/reinforced_crate`.
+- Added the required category localization key: `manual.wimc.factory_inventory_inspector`.
+- Kept pages short with explicit `<np>` page breaks to avoid fixed-height manual overflow.
+- Verified manual JSON parses, required text files exist, category localization exists, and referenced IE 1.21.1 crate recipes exist in the inspected IE source.
+- Re-ran `./gradlew.bat build --no-daemon`; build completed successfully with the QA task.
+- Re-ran a dedicated server smoke launch; server reached `Done (...)! For help, type "help"`.
+
+## In-Game Tooltip Scenarios To Run With Immersive Engineering Installed
 
 - Empty crate: hover an IE crate with no `minecraft:container` contents. With `showEmptySlots=true`, expect a 9-wide empty grid. With it disabled, expect no grid.
 - Mixed items: seal a crate containing varied stacks. Hover the resulting item and expect icons plus vanilla stack decorations.
@@ -49,3 +62,13 @@ Target: Minecraft 1.21.1, NeoForge 21.1.x, Java 21.
 - Loot-table crate: a supported crate item with `DataComponents.CONTAINER_LOOT` but no generated `DataComponents.CONTAINER` should show the unresolved-loot message instead of attempting to generate or request server data.
 - GUI scale: test scale 1, 2, 3, and Auto. The vanilla tooltip positioner should clamp the custom component to screen bounds.
 - Dedicated server launch: run the NeoForge server configuration. The common mod should load config only, and client GUI classes should not be loaded.
+
+## In-Game Manual Scenarios To Run With Immersive Engineering Installed
+
+- Open the Engineer's Manual and confirm Storage & Transport contains a `Factory Inventory Inspector` subcategory.
+- Open `Engineer's Crate Preview`; expect crate and reinforced crate icons, short readable pages, and links to the other two WIMC entries.
+- Open `Supported Crates`; expect the wooden crate and reinforced crate crafting recipe panels to render.
+- Use the link from `Supported Crates` to IE's existing `Storage Crates` entry.
+- Open `Preview Settings`; expect player-facing config explanations without oversized tables or clipped text.
+- Change IE manual GUI scale and bad-eyesight settings; re-open all WIMC entries and confirm no text is cut off.
+- Launch without Immersive Engineering; WIMC should still build and dedicated server startup should remain safe.

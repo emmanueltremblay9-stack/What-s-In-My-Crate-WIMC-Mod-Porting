@@ -1,0 +1,17 @@
+{
+  "crate_recipe": {
+    "type": "crafting",
+    "recipe": "immersiveengineering:crafting/crate"
+  },
+  "reinforced_crate_recipe": {
+    "type": "crafting",
+    "recipe": "immersiveengineering:crafting/reinforced_crate"
+  },
+  "crate_icons": {
+    "type": "item_display",
+    "items": [
+      "immersiveengineering:crate",
+      "immersiveengineering:reinforced_crate"
+    ]
+  }
+}

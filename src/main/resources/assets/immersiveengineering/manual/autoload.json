@@ -1,0 +1,22 @@
+{
+  "autoload_priority": 0,
+  "storage_transport": {
+    "wimc:factory_inventory_inspector": {
+      "category_weight": 22,
+      "entry_list": [
+        {
+          "source": "wimc:crate_preview_overview",
+          "weight": 0
+        },
+        {
+          "source": "wimc:supported_crates",
+          "weight": 1
+        },
+        {
+          "source": "wimc:preview_settings",
+          "weight": 2
+        }
+      ]
+    }
+  }
+}

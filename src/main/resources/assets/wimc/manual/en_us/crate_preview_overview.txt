@@ -1,0 +1,7 @@
+Engineer's Crate Preview
+Look inside before unpacking
+<&crate_icons>This client-side inspector adds a compact inventory preview to supported crate item tooltips.
+Hover a sealed crate stack to see its stored items, stack counts, and empty slots when the setting is enabled.<br>
+It does not open the crate, request server data, or generate loot-table contents on the client.<np>
+Use this page as a quick check at a workbench, warehouse wall, or storage shelf before placing crates back down.
+For crate support and recipes, see <link;wimc:supported_crates;supported crates>. For display options, see <link;wimc:preview_settings;preview settings>.
