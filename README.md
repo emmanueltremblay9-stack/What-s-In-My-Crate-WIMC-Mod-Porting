@@ -1,5 +1,7 @@
 # Engineer's Crate Preview
 
+![Engineer's Crate Preview logo](src/main/resources/wimc_logo.png)
+
 Client-only NeoForge 1.21.1 / Java 21 tooltip previews for Immersive Engineering crates and compatible industrial crate items. The feature is inspired by redcatone's What's In My Crate (WIMC), but implemented with modern NeoForge tooltip component APIs.
 
 ## Features

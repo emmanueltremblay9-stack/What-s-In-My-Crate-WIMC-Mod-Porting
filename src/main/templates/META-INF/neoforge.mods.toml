@@ -8,6 +8,7 @@ version="${mod_version}"
 displayName="${mod_name}"
 authors="${mod_authors}"
 credits="Inspired by What's In My Crate (WIMC) by redcatone."
+logoFile="wimc_logo.png"
 description='''${mod_description}'''
 
 [[dependencies.${mod_id}]]
