@@ -130,8 +130,17 @@ tasks.register('qaPreviewModel', JavaExec) {
     mainClass = 'com.emmanueltremblay.wimc.crate.CratePreviewContentsQa'
 }
 
+tasks.register('qaManualResources', JavaExec) {
+    group = 'verification'
+    description = 'Validates Engineer Manual resource hierarchy, anchors, links, recipes, and localization.'
+    classpath = sourceSets.qa.runtimeClasspath
+    mainClass = 'com.emmanueltremblay.wimc.qa.ManualResourcesQa'
+    args project.projectDir.absolutePath
+}
+
 tasks.named('check').configure {
     dependsOn tasks.named('qaPreviewModel')
+    dependsOn tasks.named('qaManualResources')
 }
 
 idea {

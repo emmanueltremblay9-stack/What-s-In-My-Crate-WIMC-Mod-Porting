@@ -52,6 +52,13 @@ Target: Minecraft 1.21.1, NeoForge 21.1.x, Java 21.
 - Re-ran `./gradlew.bat build --no-daemon`; build completed successfully with the QA task.
 - Re-ran a dedicated server smoke launch; server reached `Done (...)! For help, type "help"`.
 
+## Bugfix Pass 5 - June 17, 2026
+
+- Removed Markdown-style backticks from Engineer's Manual player-facing text because IE manual pages render them literally.
+- Added `qaManualResources` to validate WIMC manual autoload hierarchy, entry text shape, anchors, links, recipe references, item-display IDs, and category localization during Gradle `check`.
+- Re-ran `./gradlew.bat build --no-daemon`; build completed successfully with `qaPreviewModel` and `qaManualResources`.
+- Re-ran a dedicated server smoke launch; server reached `Done (...)! For help, type "help"`.
+
 ## In-Game Tooltip Scenarios To Run With Immersive Engineering Installed
 
 - Empty crate: hover an IE crate with no `minecraft:container` contents. With `showEmptySlots=true`, expect a 9-wide empty grid. With it disabled, expect no grid.
